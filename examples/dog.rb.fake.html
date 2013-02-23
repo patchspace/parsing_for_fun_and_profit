@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>dog.rb</title>
+	<meta charset="UTF-8">
+	<style type="text/css">
+		/* General styling */
+		.source {
+			background-color: #1E1E1E;
+			float: left;
+			padding-left: 15px;
+			padding-right: 15px;
+			padding-top: 6px;
+			padding-bottom: 6px;
+		}
+		.source pre {
+			color: #CDCDCD;
+			font-size: 18px;
+			margin: 3px;
+		}
+		.source .line {
+			min-height: 21px;
+		}
+		.source .keyword {
+			color: #5874CD;
+		}
+		.source .methname {
+			color: #CD4E55;
+		}
+		.source .param {
+			color: #58CD4D;
+		}
+		.source .arg {
+			color: #62915D;
+		}
+		.source .classconstdef {
+			color: #3A8CCD;
+		}
+		.source .constref {
+			color: #41812F;
+		}
+		.source .ivar {
+			color: #57B646;
+		}
+		.source .string-lit {
+			color: #A8CD3A;
+		}
+		.source .boolean-lit {
+			color: #C332CD;
+		}
+
+		/* Hover stuff*/
+
+		.source .linegroup.highlighted {
+			background-color: #4A4A4A;
+		}
+		.source .methname:hover,
+		.source .classconstdef:hover,
+		.source .keyword.if:hover {
+			text-decoration: underline;
+		}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			var toggleFunction = function (type) {
+				return function() {
+				  	$(this).parents(".linegroup." + type).toggleClass('highlighted');
+				};
+			};
+
+			var methodToggle = toggleFunction("method");
+			$('.linegroup .methname').mouseenter(methodToggle).mouseleave(methodToggle);
+			classToggle = toggleFunction("class");
+			$('.linegroup .classconstdef').mouseenter(classToggle).mouseleave(classToggle);
+			ifToggle = toggleFunction("if");
+			$('.linegroup .keyword.if').mouseenter(ifToggle).mouseleave(ifToggle);
+		});
+	</script>
+</head>
+<body>
+	<div class="source">
+		<div class="source-body">
+			<div class="linegroup class">
+				<div class="line"><pre><span class="keyword">class</span> <span class="classconstdef">Dog</span></pre></div>
+				<div class="linegroup method">
+					<div class="line"><pre>  <span class="keyword">def</span> <span class="methname">initialize</span>(<span class="param">name</span>)</pre></div>
+					<div class="line"><pre>    <span class="ivar">@name</span> = name</pre></div>
+					<div class="line"><pre>    <span class="ivar">@hungry</span> = <span class="boolean-lit">true</span></pre></div>
+					<div class="line"><pre>  <span class="keyword">end</span></pre></div>
+				</div>
+				<div class="line"><pre></pre></div>
+				<div class="linegroup method">
+					<div class="line"><pre>  <span class="keyword">def</span> <span class="methname">listen</span>(<span class="param">masters_voice</span>)</pre></div>
+					<div class="line"><pre>    what_i_heard = <span class="arg">masters_voice</span></pre></div>
+					<div class="linegroup if">
+						<div class="line"><pre>    <span class="keyword if">if</span> what_i_heard == <span class="ivar">@name</span></pre></div>
+						<div class="line"><pre>      puts(<span class="string-lit">"WOOF, WOOF!"</span>)</pre></div>
+						<div class="line"><pre>    <span class="keyword">end</span></pre></div>
+					</div>
+					<div class="line"><pre>  <span class="keyword">end</span></pre></div>
+				</div>
+				<div class="line"><pre><span class="keyword">end</span></pre></div>
+			</div>
+			<div class="line"><pre></pre></div>
+			<div class="line"><pre>dog = <span class="constref">Dog</span>.new(<span class="string-lit">"Fido"</span>)</pre></div>
+			<div class="line"><pre>dog.listen(<span class="string-lit">"Fido"</span>)</pre></div>
+		</div> <!-- check!!! -->
+	</div>
+	<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+</body>
+</html>

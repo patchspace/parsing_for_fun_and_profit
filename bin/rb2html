@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+
+# Really primitive script to run the syntax highlighter
+
+# Usage: rb2html <some_file.rb>
+# Turns some_file.rb into some_file.rb.html
+
+require 'erb'
+require_relative '../lib/parsing_for_fun_and_profit'
+
+# Read in the Ruby source code
+source_filename = ARGV[0] or raise "Gimme a file, idiot!"
+source = File.read(source_filename)
+
+# Create a Treetop parser that uses our Ruby grammar
+parser = ParsingForFunAndProfit::SimpleRubyParser.new
+
+# Create a HTML builder, which listens to the parser
+# as we walk the Ruby source tree
+html_builder = ParsingForFunAndProfit::HTMLBuilder.new
+
+# Treetop gives us a parse method which builds a syntax
+# tree of the Ruby source, we then use our own generate_html
+# method to walk this tree and tell the HTMLBuilder
+# what lines and code fragments we've got
+parse_tree = parser.parse(source)
+if parse_tree
+  parse_tree.generate_html(html_builder)
+else
+  puts "Parsing failed! Treetop output:"
+  puts
+  puts parser.failure_reason
+end
+
+# Extract the HTML markup which will be used fill in the
+# <body> element, and run it through our HTML file template
+highlighted_source = html_builder.to_html
+template = ERB.new(File.read("lib/template.html.erb"))
+full_html_page = template.result(binding)
+
+# Finally write the full HTML document to the destination file
+destination_filename = source_filename + ".html"
+File.open(destination_filename, "w") do |output_file|
+  output_file << full_html_page
+end
