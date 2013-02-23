@@ -1,0 +1,62 @@
+# Most of this is nicked from one of the examples bundled
+# with the Treetop gem
+
+module ParsingForFunAndProfit
+  grammar Arithmetic
+    rule expression
+      additive / number
+    end
+
+    rule additive
+      head:multitive
+      tail:(
+        space operator:additive_op
+        space operand:multitive)* <BinaryOperation>
+    end
+
+    rule additive_op
+      '+' {
+        def apply(a, b)
+          a + b
+        end
+      }
+    end
+
+    rule multitive
+      head:primary
+      tail:(
+        space operator:multiplicative_op
+        space operand:primary)* <BinaryOperation>
+    end
+
+    rule multiplicative_op
+      '*' {
+        def apply(a, b)
+          a * b
+        end
+      }
+    end
+
+    rule primary
+      number
+      /
+      '(' space expression space ')' {
+        def evaluate
+          expression.evaluate
+        end
+      }
+    end
+
+    rule number
+      '-'? [1-9] [0-9]* {
+        def evaluate
+          text_value.to_i
+        end
+      }
+    end
+
+    rule space
+      ' '*
+    end
+  end
+end
