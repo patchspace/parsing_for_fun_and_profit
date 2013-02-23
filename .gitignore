@@ -1,0 +1,4 @@
+\.DS_Store
+tmp
+*\.sublime-workspace
+demo/dog\.rb\.html
