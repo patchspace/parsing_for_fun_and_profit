@@ -6,6 +6,10 @@ module ParsingForFunAndProfit
     describe SimpleRubyParser do
       subject(:parser) { SimpleRubyParser.new }
 
+      def conversion_method_for_parse_as
+        :to_ast
+      end
+
       describe "NWRUG example" do
         example do
           source = -%{
