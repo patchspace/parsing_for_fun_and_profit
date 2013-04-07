@@ -18,52 +18,54 @@ require 'builder'
 # when you hover over the class name.
 
 module ParsingForFunAndProfit
-  class HTMLBuilder
-    def initialize
-      @buffer = ""
-      @builder = Builder::XmlMarkup.new(target: @buffer)
-      clear_line
-    end
-
-    def linegroup(name)
-      @builder.div(class: "linegroup #{name}") do |b|
-        yield self
+  module SimpleRuby
+    class HTMLBuilder
+      def initialize
+        @buffer = ""
+        @builder = Builder::XmlMarkup.new(target: @buffer)
+        clear_line
       end
-    end
 
-    def text_node(type, content)
-      line.span(class: type) do
-        line << content
-      end
-    end
-
-    def line_ended
-      @builder.div(class: "line") do
-        @builder.pre do
-          @builder << @line_buffer
+      def linegroup(name)
+        @builder.div(class: "linegroup #{name}") do |b|
+          yield self
         end
       end
 
-      clear_line
-    end
-
-    def to_html
-      @buffer
-    end
-
-    private
-
-    def line
-      if @line.nil?
-        @line_buffer = ""
-        @line = Builder::XmlMarkup.new(target: @line_buffer)
+      def text_node(type, content)
+        line.span(class: type) do
+          line << content
+        end
       end
-      @line
-    end
 
-    def clear_line
-      @line = nil
-      @line_buffer = ""
+      def line_ended
+        @builder.div(class: "line") do
+          @builder.pre do
+            @builder << @line_buffer
+          end
+        end
+
+        clear_line
+      end
+
+      def to_html
+        @buffer
+      end
+
+      private
+
+      def line
+        if @line.nil?
+          @line_buffer = ""
+          @line = Builder::XmlMarkup.new(target: @line_buffer)
+        end
+        @line
+      end
+
+      def clear_line
+        @line = nil
+        @line_buffer = ""
+      end
     end
   end
 end
