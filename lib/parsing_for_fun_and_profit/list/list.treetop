@@ -1,53 +1,10 @@
+# This is the file the parser uses - build it up rule by rule
+# as you work through the RSpec examples
+
 module ParsingForFunAndProfit
   module List
     grammar List
-      rule maybe_list
-        list
-        /
-        nothing
-      end
 
-      rule list
-        "[" blank elems:(list_elements?) blank "]" {
-          def to_list
-            elems.to_list
-          end
-        }
-      end
-
-      rule blank
-        " "*
-      end
-
-      rule list_elements
-        first:list_element blank rest:("," blank second:list_element)* {
-          def to_list
-            [first.to_list] + rest.elements.map { |elem| elem.second.to_list }
-          end
-        }
-      end
-
-      rule list_element
-        symbol
-        /
-        list
-      end
-
-      rule symbol
-        [a-z] {
-          def to_list
-            text_value.to_sym
-          end
-        }
-      end
-
-      rule nothing
-        "" {
-          def to_list
-            :nothing
-          end
-        }
-      end
     end
   end
 end
