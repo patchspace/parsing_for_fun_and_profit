@@ -2,7 +2,9 @@
 # as you work through the RSpec examples
 
 module ParsingForFunAndProfit
-  grammar Arithmetic
+  module List
+    grammar List
 
+    end
   end
 end

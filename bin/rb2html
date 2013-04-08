@@ -6,18 +6,18 @@
 # Turns some_file.rb into some_file.rb.html
 
 require 'erb'
-require_relative '../lib/parsing_for_fun_and_profit'
+require_relative '../lib/parsing_for_fun_and_profit/simple_ruby'
 
 # Read in the Ruby source code
 source_filename = ARGV[0] or raise "Gimme a file, idiot!"
 source = File.read(source_filename)
 
 # Create a Treetop parser that uses our Ruby grammar
-parser = ParsingForFunAndProfit::SimpleRubyParser.new
+parser = ParsingForFunAndProfit::SimpleRuby::SimpleRubyParser.new
 
 # Create a HTML builder, which listens to the parser
 # as we walk the Ruby source tree
-html_builder = ParsingForFunAndProfit::HTMLBuilder.new
+html_builder = ParsingForFunAndProfit::SimpleRuby::HTMLBuilder.new
 
 # Treetop gives us a parse method which builds a syntax
 # tree of the Ruby source, we then use our own generate_html

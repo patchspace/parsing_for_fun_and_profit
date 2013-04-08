@@ -2,7 +2,7 @@
 
 (Mainly fun)
 
-This is the code for the talk I did at [North West Ruby User Group][nwrug] in February 2013.
+This is the code for the talk I did at [North West Ruby User Group in February 2013][nwrug] and then again (but new and improved!) and [Sheffield Ruby User Group in April 2013][shrug].
 
 ## Code highlights
 
@@ -23,4 +23,5 @@ Take a look at `bin/rb2html` for as a jump-off point to see how the syntax highl
 
 If you have any questions or comments, feel free to contact me at [ash.moran@patchspace.co.uk](mailto:ash.moran@patchspace.co.uk).
 
-[nwrug]: http://nwrug.org/
+[nwrug]: http://nwrug.org/events/february-2013-parsing-for-fun-profit/
+[shrug]: http://shrug.org/meetings/shrug-41/

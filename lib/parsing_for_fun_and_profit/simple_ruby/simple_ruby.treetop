@@ -1,0 +1,184 @@
+module ParsingForFunAndProfit
+  module SimpleRuby
+    grammar SimpleRuby
+      rule program
+        statement
+        (newline statement)*
+        newline?
+        <Program>
+      end
+
+      rule statement
+        (
+          methoddef
+          /
+          assignment
+          /
+          expression
+          /
+          blank
+        )
+        (whitespace? comment)?
+      end
+
+      rule comment
+        "#" (!newline .)* <TextNode> {
+          def text_node_type; :comment; end
+        }
+      end
+
+      rule blank
+        whitespace?
+      end
+
+      rule methoddef
+        keyword_def whitespace method_name params? (whitespace? comment?)? newline
+          method_expressions
+        keyword_end <MethodDefinitionNode>
+      end
+
+      rule method_name
+        symbol {
+          def text_node_type; :methname; end
+        }
+      end
+
+      rule params
+        lparen (param (whitespace? comma whitespace? param)*)? rparen
+      end
+
+      rule param
+        symbol_text <TextNode> {
+          def text_node_type; :param; end
+        }
+      end
+
+      rule method_expressions
+        (whitespace? (comment / method_expression) newline)*
+      end
+
+      rule method_expression
+        !keyword_end (assignment / method_call / simple_expression) (whitespace? comment)?
+      end
+
+      rule assignment
+        assignable whitespace? equals whitespace? expression
+      end
+
+      rule equals
+        "="  <TextNode> {
+          def text_node_type; :equals; end
+        }
+      end
+
+      rule expression
+        method_call / simple_expression
+      end
+
+      rule string
+        "\"" [^"]* "\"" <TextNode> {
+          def text_node_type; :"string-lit"; end
+        }
+      end
+
+      rule keyword_def
+        "def" <TextNode> {
+          def text_node_type; :keyword; end
+        }
+      end
+
+      rule keyword_end
+        "end" <TextNode> {
+          def text_node_type; :keyword; end
+        }
+      end
+
+      rule method_call
+        ((simple_expression dot)? symbol arguments?)+ {
+          def to_ast
+            elements.map { |element| element.to_ast }
+          end
+        }
+      end
+
+      rule arguments
+        lparen (expression (whitespace? comma whitespace? expression)*)? rparen
+      end
+
+      rule assignable
+        ivar / symbol
+      end
+
+      rule simple_expression
+        ivar / symbol / string / constref
+      end
+
+      rule lparen
+        "("  <TextNode> {
+          def text_node_type; :lparen; end
+        }
+      end
+
+      rule rparen
+        ")"  <TextNode> {
+          def text_node_type; :rparen; end
+        }
+      end
+
+      rule constref
+        [A-Z] [0-9a-zA-Z_]*  <TextNode> {
+          def text_node_type; :constref; end
+        }
+      end
+
+      rule ivar
+        "@" [a-z] [0-9a-zA-Z_]* <TextNode> {
+          def text_node_type; :ivar; end
+        }
+      end
+
+      rule symbol
+        [a-z] [0-9a-zA-Z_]* <TextNode> {
+          def text_node_type; :symbol; end
+        }
+      end
+
+      # To re-use the definition of symbol without
+      # accidentally making everything that uses it a
+      # TextNode of type :symbol
+      rule symbol_text
+        [a-z] [0-9a-zA-Z_]*
+      end
+
+      rule separator
+        whitespace / dot
+      end
+
+      rule whitespace
+        spaces
+      end
+
+      rule spaces
+        " "+ <TextNode> {
+          def text_node_type; :whitespace; end
+        }
+      end
+
+      rule dot
+        "." <TextNode> {
+          def text_node_type; :dot; end
+        }
+      end
+
+      rule comma
+        "," <TextNode> {
+          def text_node_type; :comma; end
+        }
+      end
+
+      rule newline
+        "\n" <NewlineNode>
+      end
+    end
+  end
+end
