@@ -1,0 +1,55 @@
+# Completed List grammar that passes all specs
+
+module ParsingForFunAndProfit
+  module List
+    grammar List
+      rule maybe_a_list
+        list
+        /
+        not_a_list
+      end
+
+      rule list
+        "[" blank items:list_items? blank "]" {
+          def to_list
+            items.to_list
+          end
+        }
+      end
+
+      rule list_items
+        first:list_item rest:(blank "," blank next:list_item)* {
+          def to_list
+            [first.to_list] + rest.elements.map { |item| item.next.to_list }
+          end
+        }
+      end
+
+      rule list_item
+        symbol
+        /
+        list
+      end
+
+      rule symbol
+        [a-z] {
+          def to_list
+            text_value.to_sym
+          end
+        }
+      end
+
+      rule blank
+        " "*
+      end
+
+      rule not_a_list
+        "" {
+          def to_list
+            :nothing
+          end
+        }
+      end
+    end
+  end
+end

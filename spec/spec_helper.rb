@@ -21,7 +21,7 @@ RSpec::Matchers.define :parse_as do |expected_tree|
     @actual_parsed = parser.parse(source)
 
     if @actual_parsed
-      @actual = @actual_parsed.to_ast if @actual_parsed
+      @actual = @actual_parsed.send(conversion_method_for_parse_as) if @actual_parsed
     else
       @failure = { line: parser.failure_line, column: parser.failure_column, reason: parser.failure_reason }
     end
