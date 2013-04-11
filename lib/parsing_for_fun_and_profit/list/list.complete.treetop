@@ -12,7 +12,11 @@ module ParsingForFunAndProfit
       rule list
         "[" blank items:list_items? blank "]" {
           def to_list
-            items.to_list
+            if items.text_value == ""
+              []
+            else
+              items.to_list
+            end
           end
         }
       end
