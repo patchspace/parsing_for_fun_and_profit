@@ -10,9 +10,29 @@ module ParsingForFunAndProfit
       end
 
       rule list
-        "[" blank items:list_items? blank "]" {
+        (
+          empty_list
+          /
+          list_with_elements
+        ) {
+          def list_value
+            to_list
+          end
+        }
+      end
+
+      rule empty_list
+        "[" blank "]" {
           def to_list
-            items.to_list
+            [ ]
+          end
+        }
+      end
+
+      rule list_with_elements
+        "[" blank list_items blank "]" {
+          def to_list
+            list_items.to_list
           end
         }
       end
@@ -20,7 +40,7 @@ module ParsingForFunAndProfit
       rule list_items
         first:list_item rest:(blank "," blank next:list_item)* {
           def to_list
-            [first.to_list] + rest.elements.map { |item| item.next.to_list }
+            [first.list_value] + rest.elements.map { |element| element.next.list_value }
           end
         }
       end
@@ -33,7 +53,7 @@ module ParsingForFunAndProfit
 
       rule symbol
         [a-z] {
-          def to_list
+          def list_value
             text_value.to_sym
           end
         }
