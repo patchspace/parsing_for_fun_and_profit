@@ -41,41 +41,47 @@ module ParsingForFunAndProfit
         expect("[]").to parse_as([])
       end
 
-      # 1:
       # rule list
+      #   "[" blank "]" {
+      #     def to_list
+      #       [ ]
+      #     end
+      #   }
+      # end
+      #
+      # rule blank
+      #   " "*
+      # end
+      example do
+        pending
+        expect("[   ]").to parse_as([])
+      end
+
+      # rule list
+      #   empty_list
+      #   /
+      #   list_with_elements
+      # end
+      #
+      # rule empty_list
+      #   "[" blank "]" {
+      #     def to_list
+      #       [ ]
+      #     end
+      #   }
+      # end
+      #
+      # rule list_with_elements
       #   "[" list_item "]" {
       #     def to_list
-      #       [ list_item.to_list ]
+      #       [ list_item.list_value ]
       #     end
       #   }
       # end
       #
       # rule list_item
       #   "a" {
-      #     def to_list
-      #       :a
-      #     end
-      #   }
-      # end
-      #
-      # 2:
-      # class ::Treetop::Runtime::SyntaxNode
-      #   def to_list
-      #     nil
-      #   end
-      # end
-      #
-      # rule list
-      #   "[" item:list_item? "]" {
-      #     def to_list
-      #       [ item.to_list ].compact
-      #     end
-      #   }
-      # end
-      #
-      # rule list_item
-      #   "a" {
-      #     def to_list
+      #     def list_value
       #       :a
       #     end
       #   }
@@ -97,45 +103,32 @@ module ParsingForFunAndProfit
         expect("[z]").to parse_as([:z])
       end
 
-      # rule list
-      #   "[" blank item:list_item? blank "]" {
+      # rule list_with_elements
+      #   "[" blank list_item blank "]" {
       #     def to_list
-      #       [ item.to_list ].compact
+      #       [ list_item.list_value ]
       #     end
       #   }
-      # end
-      #
-      # rule blank
-      #   " "*
       # end
       example do
         pending
         expect("[ a ]").to parse_as([:a])
       end
 
-      # 1:
+      # rule list_with_elements
+      #   "[" blank list_items blank "]" {
+      #     def to_list
+      #       list_items.to_list
+      #     end
+      #   }
+      # end
+      #
       # rule list_items
       #   first:list_item rest:("," next:list_item)* {
       #     def to_list
-      #       [first.to_list] + rest.elements.map { |element| element.next.to_list }
+      #       [first.list_value] + rest.elements.map { |element| element.next.list_value }
       #     end
       #   }
-      # end
-      #
-      # 2:
-      # rule list
-      #   "[" blank items:list_items? blank "]" {
-      #     def to_list
-      #       items.to_list
-      #     end
-      #   }
-      # end
-      #
-      # 3:
-      # class ::Treetop::Runtime::SyntaxNode
-      #   def to_list
-      #     [ ]
-      #   end
       # end
       example do
         pending
@@ -145,7 +138,7 @@ module ParsingForFunAndProfit
       # rule list_items
       #   first:list_item rest:(blank "," blank next:list_item)* {
       #     def to_list
-      #       [first.to_list] + rest.elements.map { |element| element.next.to_list }
+      #       [first.list_value] + rest.elements.map { |element| element.next.list_value }
       #     end
       #   }
       # end
@@ -154,14 +147,9 @@ module ParsingForFunAndProfit
         expect("[ a , b , c ]").to parse_as([:a, :b, :c])
       end
 
-      example do
-        pending
-        expect("[   ]").to parse_as([])
-      end
-
       # rule symbol
       #   [a-z] {
-      #     def to_list
+      #     def list_value
       #       text_value.to_sym
       #     end
       #   }
@@ -172,6 +160,18 @@ module ParsingForFunAndProfit
       #   /
       #   list
       # end
+      #
+      # rule list
+      #   (
+      #     empty_list
+      #     /
+      #     list_with_elements
+      #   ) {
+      #     def list_value
+      #       to_list
+      #     end
+      #   }
+      # end
       example do
         pending
         expect("[ [] ]").to parse_as([[]])
@@ -179,7 +179,7 @@ module ParsingForFunAndProfit
 
       example do
         pending
-        expect("[ a, [] ]").to parse_as([ :a, [] ])
+        expect("[ a, [] ]").to parse_as([:a, []])
       end
 
       example do
@@ -189,7 +189,9 @@ module ParsingForFunAndProfit
 
       example do
         pending
-        expect("[a, [ b, c, [] ], [d], e]").to parse_as([:a, [ :b, :c, [] ], [:d], :e])
+        expect("[a, [ b, c, [] ], [d], e]").to parse_as(
+          [:a, [ :b, :c, [] ], [:d], :e]
+        )
       end
     end
   end
