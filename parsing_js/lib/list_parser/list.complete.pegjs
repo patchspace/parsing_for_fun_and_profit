@@ -31,7 +31,9 @@ list_element =
   list
 
 symbol =
-  text:[a-z]+ { return text.join("") }
+  text:[a-z]+ {
+    return text.join("")
+  }
 
 not_a_list =
   "" { return 'nothing' }

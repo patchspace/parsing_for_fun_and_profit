@@ -56,6 +56,7 @@ describe "List", ->
 
   # PEG.js-specific point
   xspecify "longer items", ->
+    # console.log() is your friend
     expect(parse('[abc]')).to.deep.equal ['abc']
 
   # list_with_elements =
