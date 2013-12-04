@@ -2,3 +2,4 @@
 tmp
 *\.sublime-workspace
 parsing_ruby/demo/dog\.rb\.html
+parsing_js/node_modules/
