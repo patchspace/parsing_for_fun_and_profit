@@ -1,4 +1,5 @@
 \.DS_Store
 tmp
 *\.sublime-workspace
-demo/dog\.rb\.html
+parsing_ruby/demo/dog\.rb\.html
+parsing_js/node_modules/

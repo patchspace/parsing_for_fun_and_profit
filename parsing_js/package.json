@@ -1,0 +1,29 @@
+{
+  "name": "parsing_js",
+  "version": "0.0.0",
+  "description": "Parsing for Fun and Profit",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "coffee-script": "~1.6.3",
+    "chai": "~1.8.1",
+    "pegjs": "~0.7.0",
+    "underscore": "~1.5.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patchspace/parsing_for_fun_and_profit"
+  },
+  "author": "Ash Moran",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/patchspace/parsing_for_fun_and_profit/issues"
+  },
+  "homepage": "https://github.com/patchspace/parsing_for_fun_and_profit"
+}
